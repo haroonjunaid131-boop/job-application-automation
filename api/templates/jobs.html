@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Board</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="navbar" style="background: var(--accent); color: white; padding: 1rem 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <div class="flex items-center">
+        <a href="/" class="flex items-center gap-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3l2 4 12 8 2-6 10-8-12 8-2-6-10 8Z"/>
+                <circle cx="9" cy="9" r="4"/>
+            </svg>
+            <span class="hidden sm:block">Job Tracker</span>
+        </a>
+        <div class="flex items-center gap-4 ml-6">
+            <a href="/jobs" class="nav-link">Job Board</a>
+            <a href="/" class="nav-link">Dashboard</a>
+        </div>
+    </div>
+</nav>
+<main class="max-w-7xl mx-auto px-4 py-6">
+    <div class="card mb-6">
+        <div class="flex flex-col lg:flex-row gap-3 items-start lg:items-center">
+            <div><h1 class="card-title mb-2">Job Board</h1><p class="text-sm text-muted mb-3">Filter and browse available positions</p></div>
+            <div class="flex flex-wrap gap-2"><select id="locationFilter" class="tab-btn" onchange="filterJobs()"><option value="all">All Locations</option><option value="lahore">Lahore</option><option value="remote">Remote</option></select><select id="jobTypeFilter" class="tab-btn" onchange="filterJobs()"><option value="all">All Types</option><option value="onsite">Onsite</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option></select><input type="text" id="keywordSearch" class="tab-btn flex-1 min-w-0" placeholder="Search by title/skills..." onkeyup="filterJobs()"></div></div>
+    </div>
+    <div id="jobsGrid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {% for job in jobs %}
+        <div class="card h-100"><div class="relative overflow-hidden"><span class="absolute top-2 left-2 px-2 py-0.5 rounded text-xs font-semibold" style="background: rgba(0,0,0,0.8); color: white;">{{ job.job_type.title() }}</span><div class="p-4 flex-1"><h3 class="card-title line-clamp-2">{{ job.title }}</h3><p class="text-sm text-muted">{{ job.company }}</p><div class="flex flex-wrap gap-1">{% if job.location %}<span class="text-xs" title="{{ job.location }}">{{ job.location }}</span>{% endif %}</div><small class="text-xs text-muted">Posted: {{ job.posted_date.strftime('%b %d, %Y') if job.posted_date else 'Unknown' }}</small><small class="text-xs text-muted">Source: {{ job.source }}</small></div><div class="card-footer p-4 border-t" style="border-color: var(--border); background: var(--bg-secondary);"><button class="btn btn-block w-full text-sm" onclick="applyJob('{{ job.id }}')">Apply Now</button></div></div></div>
+        {% endfor %}</div>
+
+    {% if jobs %}
+    <div class="mt-6 pt-6 border-t" style="border-color: var(--border);">
+      <div class="text-center"><div class="font-medium" id="jobs-count">{{ jobs|length }}</div><div>Jobs Shown</div></div></div>
+    {% endif %}
+
+    <script>document.addEventListener('DOMContentLoaded', function() { filterJobs(); });function filterJobs() { const location = document.getElementById('locationFilter').value; const jobType = document.getElementById('jobTypeFilter').value; const keyword = document.getElementById('keywordSearch').value.toLowerCase(); const cards = document.querySelectorAll('.card'); cards.forEach(card => { const type = card.querySelector('span').innerText.toLowerCase(); const title = card.querySelector('h3').innerText.toLowerCase(); const loc = card.innerText.toLowerCase().includes('lahore') || card.innerText.toLowerCase().includes('remote'); let show = true; if (location !== 'all' && !loc) show = false; if (jobType !== 'all' && type.replace('type-', '') !== jobType) show = false; if (keyword && !title.includes(keyword)) show = false; card.style.display = show ? 'block' : 'none'; });}function applyJob(jobId) { if (confirm('This will prepare your resume for this job. Actual application requires manual submission.')) { window.location.href = '/apply/' + jobId; } }document.getElementById('locationFilter').addEventListener('change', filterJobs);document.getElementById('jobTypeFilter').addEventListener('change', filterJobs);document.getElementById('keywordSearch').addEventListener('keyup', filterJobs);</script>
+</body>
+</html>

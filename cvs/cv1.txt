@@ -1,0 +1,30 @@
+Haroon Ahmed
+Senior Software Engineer
+Lahore, Pakistan
++92-300-1234567 | haroon.ahmed@email.com | linkedin.com/in/haroonahmed
+
+PROFESSIONAL SUMMARY
+Senior Software Engineer with 5+ years of experience in Python, JavaScript, and full-stack development. Strong background in building scalable web applications and leading agile teams. Expertise in cloud platforms (AWS) and containerization (Docker, Kubernetes).
+
+TECHNICAL SKILLS
+Programming Languages: Python, JavaScript, TypeScript, SQL
+Frameworks: Django, Flask, FastAPI, React, Node.js
+Cloud & DevOps: AWS, Docker, Kubernetes, CI/CD, Git
+Database: PostgreSQL, MongoDB, Redis
+
+PROFESSIONAL EXPERIENCE
+Senior Software Engineer | Tech Solutions Pvt Ltd | 2022 - Present
+- Lead a team of 4 developers in building microservices architecture
+- Developed and maintained Python-based REST APIs serving 10K+ daily users
+- Implemented CI/CD pipelines reducing deployment time by 60%
+- Optimized database queries improving performance by 40%
+
+Software Engineer | StartupXYZ | 2020 - 2022
+- Built responsive web applications using React and Django
+- Designed database schemas and optimized SQL queries
+- Collaborated with cross-functional teams on product features
+- Mentored junior developers on best practices
+
+EDUCATION
+BS Computer Science | University of Lahore | 2018
+GPA: 3.6/4.0 | Relevant Courses: Data Structures, Algorithms, Web Development

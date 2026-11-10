@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.dist/
+.build/
+venv/
+env/
+venv_lib/
+
+# Database
+*.db
+*.sqlite
+
+# Environment Variables
+.env
+
+# Vercel
+.vercel
+
+# Static files (if any)
+static/
+
+# Job monitor logs
+/job_monitor_cron.log
+
+# Application data
+tracker.db
+
+# CV files (optional - you might want to track these)
+# cvs/

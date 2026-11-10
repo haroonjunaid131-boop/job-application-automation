@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="max-w-5xl mx-auto px-4 py-6">
+    <header class="mb-8">
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-4">
+            <div class="card bg-primary text-white">
+                <div class="text-center py-4"><div class="text-2xl font-bold" id="total-apps">{{ applications|length }}</div><div>Total Applications</div></div>
+            </div>
+            <div class="card bg-success text-white">
+                <div class="text-center py-4">{% set ac = 0 %}{% for a in applications %}{% if a.status == 'applied' %}{% set ac = ac + 1 %}{% endif %}{% endfor %}<div class="text-2xl font-bold" id="applied-count">{{ ac }}</div><div>Applied</div></div>
+            </div>
+            <div class="card bg-info text-white">
+                <div class="text-center py-4">{% set ic = 0 %}{% for a in applications %}{% if a.status == 'interviewed' %}{% set ic = ic + 1 %}{% endif %}{% endfor %}<div class="text-2xl font-bold" id="interviewed-count">{{ ic }}</div><div>Interviewed</div></div>
+            </div>
+            <div class="card bg-secondary text-white">
+                <div class="text-center py-4">{% set ts = 0 %}{% for a in applications %}{% set ts = ts + a.match_score %}{% endfor %}{% set avg = ts / applications|length if applications|length > 0 else 0 %}<div class="text-2xl font-bold" id="avg-match">{{ avg|round(0) }}%</div><div>Avg Match Score</div></div>
+            </div>
+        </div>
+    </header>
+    <main class="space-y-4">
+        <div class="card"><h2 class="text-xl font-bold">My Applications</h2><p class="text-sm text-muted">Track all job applications</p><a href="/jobs" class="btn btn-sm bg-white text-accent hover:bg-gray-50 mt-2">View All Jobs</a><table class="mt-4 w-full"><thead><tr><th>Job Title</th><th>Company</th><th>Location</th><th>Status</th><th>Match</th><th>Resume</th><th>Actions</th></tr></thead><tbody>{% if applications|length == 0 %}<tr><td colspan="7" class="text-center text-muted py-8">No applications yet</td></tr>{% else %}{% for app in applications %}<tr class="border-b"><td><a href="{{ app.job_url }}" class="text-accent">{{ app.job_title }}</a></td><td>{{ app.company }}</td><td class="text-sm" title="{{ app.location }}">{{ app.location }}</td><td><span class="status-badge status-{{ app.status }} text-xs px-2 py-0.5 rounded">{{ app.status.title() }}</span></td><td><span class="text-xs font-medium" title="{{ app.match_score }}%">{{ app.match_score }}%</span></td><td><span class="text-xs font-medium" title="Res v{{ app.resume_version }}">{{ app.resume_version }}</span></td><td><div class="flex gap-1"><a href="/apply/{{ app.id }}" class="btn btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></a><button class="btn btn-icon text-muted" title="Details" onclick="alert('Details')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 9 6 6L3 15l6 6"/></svg></button></div></td></tr>{% endfor %}{% endif %}</tbody></table></div>
+
+        <div class="card space-y-3"><h3 class="text-semibold text-sm mb-2">Status Distribution</h3><div class="flex gap-2"><span class="status-badge status-pending text-xs px-2 py-0.5 rounded bg-white/10 text-white">Pending</span><span class="status-badge status-applied text-xs px-2 py-0.5 rounded bg-white/10 text-white">Applied</span><span class="status-badge status-interview text-xs px-2 py-0.5 rounded bg-white/10 text-white">Interviewed</span><span class="status-badge status-rejected text-xs px-2 py-0.5 rounded bg-white/10 text-white">Rejected</span></div></div>
+
+        <div class="card space-y-2"><h3 class="text-semibold text-sm mb-2">Match Scores</h3><div class="flex flex-wrap gap-1">{% for app in applications %}<span class="text-xs rounded" style="background: rgba(0,0,0,0.05); color: var(--accent);">{{ app.match_score }}%</span>{% endfor %}</div></div>
+
+        <div class="card space-y-2"><h3 class="text-semibold text-sm mb-2">Recent Activity</h3>{% if applications|length > 0 %}<ul class="text-sm text-muted">{% for app in applications|reverse %}<li class="pb-1 border-b">{{ app.company }} - {{ app.job_title|truncate(20) }} - {{ app.status.title() }} - {{ app.match_score }}% match</li>{% endfor %}</ul>{% else %}<p class="text-muted">No activity yet</p>{% endif %}</div>
+    </main>
+</div>
+
+<script>document.addEventListener('DOMContentLoaded', function() { const rows = document.querySelectorAll('tbody tr'); rows.forEach(row => { row.addEventListener('mouseenter', () => row.style.background = 'var(--bg-secondary)'); row.addEventListener('mouseleave', () => row.style.background = ''); }); });</script>
+</body>
+</html>

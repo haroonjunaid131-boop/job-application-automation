@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application SaaS - Dashboard</title>
+    <meta name="description" content="Job application tracking and matching platform for Lahore jobs">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22 fill=%22currentColor%22><path d=%22M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm12-1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-1zm-6.5 7.238-4.305 2.869L7.5 17.26 2 14.292l6.5-6.5-2.837-2.837zm1.464-5.65L.738 5.75a.75.75 0 0 0-1.06 1.05l5.253 5.254a.75.75 0 0 0 1.06 0l5.254-5.253a.75.75 0 0 0-.164-1.06z%22></path></svg>">
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --card: #ffffff;
+            --border: #e3e6e8;
+            --text: #212529;
+            --text-secondary: #6c757d;
+            --muted: #868e96;
+            --accent: #2c3e50;
+            --accent-light: #34495e;
+            --success: #27ae60;
+            --success-light: #d5f5e3;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --card-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 0 0 rgba(0, 0, 0, 0.02);
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 0;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.25;
+            color: var(--text);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .display-1 { font-size: 3rem; font-weight: 700; }
+        .display-2 { font-size: 2.5rem; font-weight: 700; }
+        .display-3 { font-size: 2rem; font-weight: 600; }
+        .display-4 { font-size: 1.5rem; font-weight: 600; }
+
+        .fs-1 { font-size: 3.5rem; font-weight: 700; line-height: 1.2; }
+        .fs-2 { font-size: 3rem; font-weight: 600; line-height: 1.3; }
+        .fs-3 { font-size: 1.75rem; font-weight: 600; line-height: 1.4; }
+        .fs-4 { font-size: 1.25rem; font-weight: 600; line-height: 1.5; }
+
+        .fst-italic { font-style: italic; }
+        .text-muted { color: var(--text-secondary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-danger { color: var(--danger); }
+        .text-info { color: var(--info); }
+
+        .lh-1 { line-height: 1; }
+        .lh-2 { line-height: 2; }
+        .lh-3 { line-height: 1.5; }
+
+        /* Background patterns */
+        .bg-primary { background-color: var(--accent); }
+        .bg-secondary { background-color: var(--bg-secondary); }
+        .bg-card { background-color: var(--card); }
+        .bg-white { background-color: #ffffff; }
+        .bg-gradient { background: linear-gradient(135deg, var(--accent-light) 0%, var(--bg) 100%); }
+        .bg-pattern { background: var(--bg); }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.08), 0 2px 4px 0 rgba(0, 0, 0, 0.04);
+        }
+
+        .card:hover *:not(.status-badge, .btn, .nav-link):not(:hover) {
+            opacity: 0.7;
+        }
+
+        .card-header {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title { font-size: 1.25rem; font-weight: 600; }
+        .card-subtitle { font-size: 0.875rem; color: var(--text-secondary); }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-lg {
+            padding: 0.875rem 1.75rem;
+            font-size: 1rem;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 600;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 9999px;
+        }
+
+        .status-pending { background: #fffbeb; color: var(--warning); }
+        .status-applied { background: #e8f5e9; color: var(--success); }
+        .status-rejected { background: #fdecea; color: var(--danger); }
+        .status-interview { background: #e3f2fd; color: var(--info); }
+
+        .badge-soft {
+            padding: 0.25em 0.5em;
+            font-size: 0.65em;
+        }
+
+        /* Nav */
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 0.875rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        tbody tr:hover td {
+            border-color: var(--border);
+        }
+
+        th, td {
+            vertical-align: middle;
+        }
+
+        /* Status badge in table */
+        .status-badge-small {
+            padding: 0.15em 0.4em;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+
+        /* Status pills in dashboard */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2em 0.5em;
+            font-size: 0.65rem;
+            font-weight: 500;
+            border-radius: 9999px;
+        }
+
+        /* Metrics */
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+        }
+
+        .metric-value { font-size: 2.25rem; font-weight: 700; }
+        .metric-label { font-size: 0.875rem; opacity: 0.9; margin-top: 0.25rem; }
+
+        /* Status pills */
+        .status-pill-group .status-pill + .status-pill { margin-left: 0.4rem; }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .card {
+                padding: 1.25rem;
+            }
+
+            .display-3 { font-size: 1.5rem; }
+            .display-4 { font-size: 1.1rem; }
+
+            table th, table td {
+                padding: 0.6rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            th { padding: 0.75rem 0.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 0.875rem;
+            }
+
+            .metric-value { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" style="background: var(--accent); color: white; padding: 1rem 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div class="flex items-center">
+            <a href="/" class="flex items-center gap-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3l2 4 12 8 2-6 10-8-12 8-2-6-10 8Z"/>
+                    <circle cx="9" cy="9" r="4"/>
+                </svg>
+                <span class="hidden sm:block">Job Tracker</span>
+            </a>
+
+            <div class="flex items-center gap-4 ml-6">
+                <a href="/jobs" class="nav-link">Job Board</a>
+                <a href="#" class="nav-link">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Header / Metrics Overview -->
+        <header class="mb-8 max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 xl:grid-cols-4 gap-4">
+                <!-- Total Applications Metric -->
+                <div class="card text-white bg-primary">
+                    <div class="flex items-center gap-2">
+                        <div class="metric-value" id="total-apps">{{ applications.length }}</div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3l2 4 12 8 2-6 10-8-12 8-2-6-10 8Z"/>
+                        </svg>
+                    </div>
+                    <span class="metric-label text-opacity-90">Total Applications</span>
+                </div>
+
+                <!-- Applied Metric -->
+                <div class="card bg-success text-white">
+                    <div class="flex items-center gap-2">
+                        <div class="metric-value" id="applied-count">{{ applications.filter(a => a.status === 'applied').length }}</div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v4l10 8-10 8v-4H5l7-7h6zM12 10l6 4-6 8-6-8 6-4v4z"/>
+                        </svg>
+                    </div>
+                    <span class="metric-label text-opacity-90">Applied</span>
+                </div>
+
+                <!-- Interviewed Metric -->
+                <div class="card bg-info text-white">
+                    <div class="flex items-center gap-2">
+                        <div class="metric-value" id="interviewed-count">{{ applications.filter(a => a.status === 'interviewed').length }}</div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 9l-1-9h-9l-1 9H5l7 11 7-11h10zM13 3h2v2h-2V3zm0 6h2v6h-2V9zm0 6h2v2h-2V15z"/>
+                        </svg>
+                    </div>
+                    <span class="metric-label text-opacity-90">Interviewed</span>
+                </div>
+
+                <!-- Match Avg Metric -->
+                <div class="card bg-secondary text-white">
+                    <div class="flex items-center gap-2">
+                        <div class="metric-value" id="avg-match">{{ applications.length > 0 ? (applications.reduce((sum, a) => sum + a.match_score, 0) / applications.length).toFixed(0) : '0' }}%</div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v4l10 8-10 8v-4H5l7-7h6zM12 10l6 4-6 8-6-8 6-4v4z"/>
+                        </svg>
+                    </div>
+                    <span class="metric-label text-opacity-90">Avg Match Score</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="grid max-w-5xl mx-auto w-full gap-6">
+            <!-- Left: Applications Table -->
+            <div class="card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="card-title">My Applications</h2>
+                        <p class="text-sm text-muted">Track all job applications with match scores</p>
+                    </div>
+                    <a href="/jobs" class="btn btn-sm bg-white text-accent hover:bg-gray-50">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12l2 4 12 8 2-6 10-8-12 8-2-6-10 8Z"/>
+                        </svg>
+                        View All Jobs
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Company</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Match Score</th>
+                                <th>Resume Version</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if applications.length === 0 %}
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    <svg class="empty-state-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M9 19c1.408-3.094 5.837-3.127 6.197 0l.057-.194c.36-1.027.36-2.195 0-3.222l-1.228-4.409c-.327-.967-1.008-1.46-1.773-.93L12 6l-6.23 3.732c-.766.453-1.447.78-1.774.93l-1.229 4.41L5.2 13.7c-.36 1.026.36 2.195 0 3.222l.057.194c-2.077.575-4.505.527-6.196 0l-.057-.194c-.36 1.027-.36 2.195 0 3.222l1.229 4.409c.77.462 1.451.76 1.774.93l6.23-3.732c.332-.617.332-1.46 0-2.078l-1.228-4.409z"/>
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    </svg>
+                                    <span>No applications yet</span>
+                                    <p class="mt-2 text-sm">Applications will appear here as you apply to jobs</p>
+                                </span>
+                            </tr>
+                            {% else %}
+                            {% for app in applications %}
+                            <tr>
+                                <td>
+                                    <a href="{{ app.job_url }}" class="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
+                                        {{ app.job_title }}
+                                    </a>
+                                </td>
+                                <td>{{ app.company }}</td>
+                                <td>
+                                    <span class="text-sm" title="{{ app.location }}">{{ app.location }}</span>
+                                </td>
+                                <td>
+                                    <span class="status-pill status-pill-{{ app.status }}">{{ app.status.title() }}</span>
+                                </td>
+                                <td>
+                                    <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background: var(--bg-secondary);">
+                                        <span class="text-xs font-medium" title="{{ app.match_score }}%">{{ app.match_score }}%</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-sm font-medium" title="Resume version {{ app.resume_version }}">{{ app.resume_version }}</span>
+                                </td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        <a href="/apply/{{ app.id }}" class="btn btn-icon" title="Apply Again" aria-label="Apply Again">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="20 6 9 17 4 12"/>
+                                            </svg>
+                                        </a>
+                                        <button class="btn btn-icon text-muted" title="Details" aria-label="Details" onclick="showDetails({{ app.id }})">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/><path d="m9 9 6 6L3 15l6 6"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right: Summary & Stats -->
+            <div class="card space-y-4">
+                <!-- Status Distribution -->
+                <div>
+                    <h3 class="card-title mb-3">Status Distribution</div>
+                    <div class="status-pill-group flex">
+                        <span class="status-pill bg-white/10 text-white"><span class="status-badge status-pending text-white text-xs px-2 py-0.5 rounded">Pending</span></span>
+                        <span class="status-pill bg-white/10 text-white text-xs px-2 py-0.5 rounded"><span class="status-badge status-applied text-white text-xs px-2 py-0.5 rounded">Applied</span></span>
+                        <span class="status-pill bg-white/10 text-white text-xs px-2 py-0.5 rounded"><span class="status-badge status-interview text-white text-xs px-2 py-0.5 rounded">Interviewed</span></span>
+                        <span class="status-pill bg-white/10 text-white text-xs px-2 py-0.5 rounded"><span class="status-badge status-rejected text-white text-xs px-2 py-0.5 rounded">Rejected</span></span>
+                    </div>
+                </div>
+
+                <!-- Match Score Distribution -->
+                <div>
+                    <h3 class="card-title mb-3">Match Score Distribution</h3>
+                    <div class="flex flex-wrap gap-2">
+                        {% for app in applications %}
+                        <span class="px-3 py-1 rounded text-xs" style="background: rgba(0,0,0,0.05); color: var(--accent);" title="Match: {{ app.match_score }}%">{{ app.match_score }}%</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div>
+                    <h3 class="card-title mb-3">Recent Activity</h3>
+                    {% if applications|length > 0 %}
+                    <ul class="space-y-2 text-sm">
+                        {% for app in applications|reverse|slice:0:5 %}
+                        <li class="flex items-start gap-3">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v.01M12 12v.01M12 19v.01M15.5 13.5l-5.5 5.5L7.83 14H1v-3h13.17l4.66-4.66z"/>
+                            </path>
+                            </svg>
+                            <div>
+                                <strong>{{ app.company }}</strong> - {{ app.job_title|truncate:20 }}
+                                <span class="text-xs text-muted block mt-0.5">{{ app.status.title() }} • {{ app.match_score }}% match</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-sm text-muted">No activity yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Status badge colors
+        document.addEventListener('DOMContentLoaded', function() {
+            // Highlight rows on hover
+            document.querySelectorAll('tbody tr').forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.background = 'var(--bg-secondary)';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.background = '';
+                });
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
